@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Theme Made By www.w3schools.com -->
+  <title>Text Analytics</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='app.css') }}">
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/2.0.2/anime.min.js"></script>
+	
+
+
+</head>
+<body id="myPage" data-spy="scroll" data-target=".navbar" data-offset="60">
+
+<nav class="navbar nr navbar-custom navbar-fixed-top">
+  <div class="container ">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#myPage">
+		  <img src="./static/image/download.png" alt="">
+	  </a>
+	  
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+     <ul class="nav navbar-nav navbar-right">
+		
+	   <li><a class="nav-link page-scroll" href="#home">HOME</a></li>
+	   
+       <li><a class="nav-link page-scroll" href="#text">TEXT</a></li>
+       <!-- <li><a href="#portfolio">PORTFOLIO</a></li>
+       <li><a href="#pricing">PRICING</a></li>
+       <li><a href="#contact">CONTACT</a></li> -->
+     </ul>
+    </div>
+
+  </div>
+
+</nav>
+
+<!-- <div class="container-fluid c1"><h3>Text Analytics Application</h3></div> -->
+<header id="header" class="header">
+	<div class="header-content">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12">
+					<div class="text-container">
+						<!-- <h1 class="ml15">
+							<span class="word">TEXT</span>
+							<span class="word">ANALYTICS</span>
+						</h1> -->
+						<h1 class="ml5">
+							<span class="text-wrapper">
+							  <span class="line line1"></span>
+							  <span class="letters letters-left">Text</span>
+							  <span class="letters ampersand">&amp;</span>
+							  <span class="letters letters-right">Analytics</span>
+							  <span class="line line2"></span>
+							</span>
+						  </h1>
+						<p class="p-heading p-large"></p>
+						<a class="btn-solid-lg page-scroll" href="#text">Analyze Text</a>    
+						<!-- <a class="btn-solid-lg page-scroll" href="#home">Home</a> -->
+
+					</div>
+				</div> <!-- end of col -->
+			</div> <!-- end of row -->
+		</div> <!-- end of container -->
+	</div> <!-- end of header-content -->
+</header>
+<!-- Container (About Section) -->
+<div id="text" class="container-fluid" style="background: ghostwhite;">
+	
+	<form method="POST" action="/analytics" enctype="multipart/form-data">
+		
+		<div class="container">
+			<div class="row">
+				<div class="col-md-12">
+					
+					<h2 class="ml2" style="text-align: center;color: darkslateblue;margin-top: 80px; font-family: auto;">Please Enter Text Or Open File</h2>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">
+					<textarea class="fm" name="txt" id="" rows="4" placeholder="Enter or Paste Text Here ........"></textarea>
+				</div>
+				<div class="col-md-3"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6">OR</div>
+				<div class="col-md-3"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6"><input class="fm fl" type="file" name="file" id="file" placeholder="choose file"></div>
+				<div class="col-md-3"></div>
+			</div>
+			<div class="row">
+				<div class="col-md-3"></div>
+				<div class="col-md-6"><button style="margin: auto;" type="submit" class="fm btn btn-primary">Analyse Text</button></div>
+				<div class="col-md-3"></div>
+			</div> 
+						
+		</div>
+	
+	</form>
+
+	
+	<hr>
+
+	{% if output %}
+
+	<button class="tablink" style="margin-left: 38%;" onclick="openPage('sentiment', this, '#4CAF50')" id="defaultOpen">Sentiment</button>
+	<button class="tablink" onclick="openPage('topic', this, '#4CAF50')">Topics Analysis</button>
+	
+
+	<div id="sentiment" class="tabcontent">
+		<div style="height: 3px; background-color: blue;margin-top: -50px;margin-bottom: 10px;"></div>
+		<h2  class="text-align:center" style="text-align: center;">Analysed Text With sentiment & emotions</h2>
+
+		<div class="row fixed-top trr" id="tr">
+			<div class="col-md-1" id="tb5">Sno</div>
+			<div class="col-md-5" id="tb1">Text</div>
+			<div class="col-md-2" id="tb2">Polarity Score</div>
+			<div class="col-md-2" id="tb2">Sentiment</div>
+			<div class="col-md-2" id="tb2">Emotions</div>
+		</div>
+		<div class="nth" style="width:100%; height:400px;padding: 5px; overflow:auto; margin-left:0px; border-bottom: none; border: 2px solid blue;">
+			<!-- ========================================================= -->
+			
+			<!-- <div class="row fixed-top" id="tr">
+				<div class="col-md-1" id="tb5">Sno</div>
+				<div class="col-md-5" id="tb1">Text</div>
+				<div class="col-md-2" id="tb2">Polarity Score</div>
+				<div class="col-md-2" id="tb2">Sentiment Type</div>
+				<div class="col-md-2" id="tb2">Emotions</div>
+			</div> -->
+			
+			{% for row in data %}
+				
+				{% if row['polarity'] > 0  %}
+				<div class="row" id="tr1">
+					<div class="col-md-1" id="tb5">{{loop.index}}</div>
+					<div class="col-md-5" id="tb3">{{row['text']}}</div>
+					<div class="col-md-2" id="tb4">{{row['polarity']}}</div>
+					<div class="col-md-2" id="tb4">{{row['sentiment']}}</div>
+					<div class="col-md-2" id="tb4">{{row['emotion']}}</div>
+				</div>					
+				{% elif row['polarity'] < 0 %}
+				<div class="row" id="tr2">
+					<div class="col-md-1" id="tb5">{{loop.index}}</div>
+					<div class="col-md-5" id="tb3">{{row['text']}}</div>
+					<div class="col-md-2" id="tb4">{{row['polarity']}}</div>
+					<div class="col-md-2" id="tb4">{{row['sentiment']}}</div>
+					<div class="col-md-2" id="tb4">{{row['emotion']}}</div>
+				</div>
+				{% else %}
+				<div class="row" id="tr3">
+					<div class="col-md-1" id="tb5">{{loop.index}}</div>
+					<div class="col-md-5" id="tb3">{{row['text']}}</div>
+					<div class="col-md-2" id="tb4">{{row['polarity']}}</div>
+					<div class="col-md-2" id="tb4">{{row['sentiment']}}</div>
+					<div class="col-md-2" id="tb4">{{row['emotion']}}</div>
+				</div>
+				{% endif %}
+
+			{% endfor %}
+			<!-- ========================================================= -->
+			
+		</div>
+		
+		
+	</div>
+	
+	<div id="topic" class="tabcontent">
+		<div style="height: 3px; background-color: blue;margin-top: -50px;margin-bottom: 10px;"></div>
+		
+		<h2 class="text-align:center" style="text-align: center;">Topics Analysis In Text Document</h2>
+
+		<iframe src="{{ url_for('html') }}" width="1150" height="1000">
+			<p>Your browser does not support iframes.</p>
+		</iframe>
+			
+		
+	</div>
+	
+
+	<!-- +++++++++++++++++++++++++++ -->
+
+		
+	
+
+	{% endif %}
+
+	{% if output1 %}
+
+	<button style=" margin-left:38%" class="tablink" onclick="openPage('sentiment', this, '#4CAF50')" id="defaultOpen">Sentiment</button>
+	<button class="tablink" onclick="openPage('topic', this, '#4CAF50')">Visual</button>
+	
+
+	<div id="sentiment" class="tabcontent">
+		<div style="height: 3px; background-color: blue;margin-top: -50px;margin-bottom: 10px;"></div>
+		<h2  class="text-align" style="text-align: center;">Analysed Text With sentiment & emotions</h2>
+		<div class="container" style="border: 2px solid blue;width: 100%;min-height: 198px;">
+			<div class="row" style="background-color: gray; color: white; font-weight: bold;margin-bottom: 10px;">
+				<div class="col-md-6">Texts</div>
+				<div class="col-md-2">Polarity</div>
+				<div class="col-md-2">Sentiment</div>
+				<div class="col-md-2">Emotions</div>
+			</div>
+			{% if Polarity > 0 %}
+			<div class="row" style="color: #28a745">
+				<div class="col-md-6" id="db1">{{ Texts }}</div>
+				<div class="col-md-2" id="db2">{{ Polarity }}</div>
+				<div class="col-md-2" id="db2">{{ Sentiment }}</div>
+				<div class="col-md-2" id="db3">{{emotion}}</div>				
+			</div>
+			{% elif Polarity < 0 %}
+				<div class="row" style="color: #ff9800">
+					<div class="col-md-6" id="db1">{{ Texts }}</div>
+					<div class="col-md-2" id="db2">{{ Polarity }}</div>
+					<div class="col-md-2" id="db2">{{ Sentiment }}</div>
+					<div class="col-md-2" id="db3">{{emotion}}</div>					
+				</div>
+			{% else %}
+				<div class="row">
+					<div class="col-md-6" id="db1">{{ Texts }}</div>
+					<div class="col-md-2" id="db2">{{ Polarity }}</div>
+					<div class="col-md-2" id="db2">{{ Sentiment }}</div>
+					<div class="col-md-2" id="db3">{{emotion}}</div>					
+				</div>
+			{% endif %}
+			
+		</div>
+		
+		
+	</div>
+	
+	<div id="topic" class="tabcontent">
+		<div style="height: 3px; background-color: blue;margin-top: -50px;margin-bottom: 10px;"></div>
+		<div>
+			{% if Emotion_graph == 'No' %}
+				<h1 style="text-align: center; color: red;">No Visualization Is Available here ...</h1>
+			{% else %}
+            	<img src="{{ url_for('static', filename='/'.join(['image', Emotion_graph])) }}" height="400px" width="100%" align="center"/>
+			{% endif %}
+		</div>
+	</div>
+	
+
+	<!-- +++++++++++++++++++++++++++ -->
+
+		
+	
+
+	{% endif %}
+</div>
+
+<!-- Visualization Section  -->
+<div id="" class="container-fluid text-center" style="background-color: azure; ">
+	<!-- <div class="container-fluid">
+		<h2 style="color: darkviolet;">VISUALIZATION</h2>
+	</div> -->
+	<div class="container">
+		
+	</div>
+	
+	
+</div>
+
+<!-- <footer class="container-fluid text-center">
+  <a href="#myPage" title="To Top">
+    <span style="float:right;" class="glyphicon glyphicon-chevron-up"></span>
+  </a>
+  <div style="height: 500px;">
+	
+  </div>
+  </footer> -->
+
+  <footer id="footer" class="clearfix">
+	<div id="footer-widgets">
+
+	  <div class="container">
+
+	  <div id="footer-wrapper">
+
+		<div class="row">
+		  <div class="col-sm-6 col-md-3">
+			<div id="meta-3" class="widget widgetFooter widget_meta">
+				<h4 class="widgettitle">Importent Page :</h4>
+				<ul>
+				<li><a href="/"><i class="fa fa-home fa-fw"></i> Home</a></li>
+				<li><a href="#"><i class="fa fa-link"></i>Text</a></li>
+				</ul>
+			</div>      
+		  </div> <!-- end widget1 -->
+
+		  <div class="col-sm-6 col-md-3">
+			<div id="recent-posts-3" class="widget widgetFooter widget_recent_entries">
+				<h4 class="widgettitle">Our social media :</h4>
+				  <ul>
+				  <li>
+					<a href="https://www.linkedin.com/in/satyam-singh-0a17a0120/" target="_blank"><i class="fa fa-linkedin"></i> LinkedIn</a>
+				  </li>
+				  <li>
+				   <a href="" target="_blank"><i class="fa fa-facebook"></i> Facebook</a>
+				  </li>
+			  </ul>
+			</div>            
+		  </div> <!-- end widget1 -->
+
+		  <div class="col-sm-12 col-md-5">
+			<div id="meta-4" class="widget widgetFooter widget_meta">
+				<h4 class="widgettitle">Contact Info :</h4>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon">E-mail :</span>
+						<span class="input-group-addon"><label for="">ABC@mail.com</label></span>
+						
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="input-group">
+						<span class="input-group-addon">Website  :</span>
+						<span class="input-group-addon"><label for="">www.bcstechnology.com.au</label></span>					
+					</div>
+				</div>
+
+				
+			</div>
+		   </div> <!-- end widget1 -->
+		  <div class="col-sm-12 col-md-1">
+			<div id="meta-4" class="widget widgetFooter widget_meta">
+				<a href="#myPage" title="To Top">
+					<span style="float:right;" class="glyphicon glyphicon-chevron-up"> Top</span>
+				</a>				
+			</div>
+		   </div> <!-- end widget2 -->
+
+		 
+
+		</div> <!-- end .row -->
+
+	  </div> <!-- end #footer-wrapper -->
+
+	  </div> <!-- end .container -->
+	</div> <!-- end #footer-widgets -->
+
+	<div id="sub-floor">
+	  <div class="container">
+		<div class="row">
+		  <div class="col-md-4 copyright">
+		   Copy right © 2020
+		  </div>
+		  <div class="col-md-4 col-md-offset-4 attribution">
+		   Developed by <b>Satyam Singh</b> <a target="_blank" href="https://www.bcstechnology.com.au/"> BCS Team</a> .
+		  </div>
+		</div> <!-- end .row -->
+	  </div>
+	</div>
+
+</footer>
+
+
+  <script>
+	function openPage(pageName,elmnt,color) {
+	  var i, tabcontent, tablinks;
+	  tabcontent = document.getElementsByClassName("tabcontent");
+	  for (i = 0; i < tabcontent.length; i++) {
+		tabcontent[i].style.display = "none";
+	  }
+	  tablinks = document.getElementsByClassName("tablink");
+	  for (i = 0; i < tablinks.length; i++) {
+		tablinks[i].style.backgroundColor = "";
+	  }
+	  document.getElementById(pageName).style.display = "block";
+	  elmnt.style.backgroundColor = color;
+	}
+
+	// Get the element with id="defaultOpen" and click on it
+		document.getElementById("defaultOpen").click();
+	</script>
+
+	<script>
+		$(document).ready(function() {
+		$(window).scroll(function() {
+			// var height = $('.header').height();
+			var scrollTop = $(window).scrollTop();
+
+			if (scrollTop >= 100) {
+				$('.nr').addClass('nb');
+			} 
+			else {
+				$('.nr').removeClass('nb');
+			}
+		});
+		});
+	</script>
+	<!-- Animation -->
+
+	<script>
+		anime.timeline({loop: true})
+		.add({
+			targets: '.ml5 .line',
+			opacity: [0.5,1],
+			scaleX: [0, 1],
+			easing: "easeInOutExpo",
+			duration: 700
+		}).add({
+			targets: '.ml5 .line',
+			duration: 600,
+			easing: "easeOutExpo",
+			translateY: (el, i) => (-0.625 + 0.625*2*i) + "em"
+		}).add({
+			targets: '.ml5 .ampersand',
+			opacity: [0,1],
+			scaleY: [0.5, 1],
+			easing: "easeOutExpo",
+			duration: 600,
+			offset: '-=600'
+		}).add({
+			targets: '.ml5 .letters-left',
+			opacity: [0,1],
+			translateX: ["0.5em", 0],
+			easing: "easeOutExpo",
+			duration: 600,
+			offset: '-=300'
+		}).add({
+			targets: '.ml5 .letters-right',
+			opacity: [0,1],
+			translateX: ["-0.5em", 0],
+			easing: "easeOutExpo",
+			duration: 600,
+			offset: '-=600'
+		}).add({
+			targets: '.ml5',
+			opacity: 0,
+			duration: 1000,
+			easing: "easeOutExpo",
+			delay: 1000
+		});
+	</script>
+	<script>
+		// Wrap every letter in a span
+		var textWrapper = document.querySelector('.ml2');
+		textWrapper.innerHTML = textWrapper.textContent.replace(/\S/g, "<span class='letter'>$&</span>");
+
+		anime.timeline({loop: true})
+		.add({
+			targets: '.ml2 .letter',
+			scale: [4,1],
+			opacity: [0,1],
+			translateZ: 0,
+			easing: "easeOutExpo",
+			duration: 950,
+			delay: (el, i) => 70*i
+		}).add({
+			targets: '.ml2',
+			opacity: 0,
+			duration: 1000,
+			easing: "easeOutExpo",
+			delay: 1000
+		});
+	</script>
+</body>
+</html>
